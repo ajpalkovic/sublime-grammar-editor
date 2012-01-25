@@ -1,0 +1,284 @@
+body {
+  background: #222;
+  color: #ccc;
+  font-family: consolas, monospace;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+  line-height: 18px;
+  text-shadow: 1px 1px #111;
+}
+
+input[type=text],
+textarea,
+select {
+  border: 1px solid #111;
+  font-size: 15px;
+  width: 95%;
+  background: #444;
+  color: #fff;
+  font-family: consolas, monospace;
+  background-image: -moz-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  background-image: -webkit-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: 1px 1px 1px #333;
+  -moz-box-shadow: 1px 1px 1px #333;
+  -webkit-box-shadow: 1px 1px 1px #333;
+  margin: 0;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+input[type=text]:focus,
+textarea:focus,
+select:focus {
+  /*outline-color: #c00;*/
+  outline: none;
+}
+
+textarea {
+  background-image: -moz-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  background-image: -webkit-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+}
+
+input[type=submit] {
+  width: auto;
+  padding: 0.25em 1em;
+  line-height: 1.5em;
+  background-image: -moz-linear-gradient(top, rgb(170, 0, 0) 0%, rgb(102, 0, 0) 100%);
+  background-image: -webkit-linear-gradient(top, rgb(170, 0, 0) 0%, rgb(102, 0, 0) 100%);
+  border: 2px solid #c00;
+  text-shadow: 0 0 2px #300;
+  font-weight: bold;
+  box-shadow: 1px 1px 3px #000;
+  -moz-box-shadow: 1px 1px 3px #000;
+  -webkit-box-shadow: 1px 1px 3px #000;
+  margin-right: 0.5em;
+}
+
+.label,
+.dict-entry-key {
+  display: block;
+  color: #777;7
+  padding: 3px 0 4px 0;
+  width: 200px;
+}
+
+.captures-row .dict-entry-key {
+  width: 50px;
+}
+
+.text-editor,
+.dict-entry-value {
+  display: block;
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+}
+
+.row {
+  padding: 3px;
+}
+
+.row,
+.buttons a,
+#tabs div {
+  transition: all 0.218s;
+  -moz-transition: all 0.218s;
+  -webkit-transition: all 0.218s;
+}
+.text-row,
+.dict-entry,
+.respoitory .dict-entry .dict-entry {
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  box-align: stretch;
+  -moz-box-align: stretch;
+  -webkit-box-align: stretch;
+  box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  width: 100%;
+}
+
+.repository .dict-entry {
+  display: block;
+}
+
+.repository > .dict-editor {
+  margin-left: 0;
+}
+
+.repository > .dict-editor > .dict-entries > .row > .dict-entry > .dict-entry-value {
+  margin-left: 30px;
+}
+
+.list-editor,
+.dict-editor {
+  margin-left: 30px;
+}
+
+.active-row {
+  background-color: #333;
+}
+
+.text-editor-value {
+  padding: 3px 4px;
+}
+
+.blank {
+  color: #555;
+}
+
+a {
+  color: #ccc;
+  display: inline-block;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+/*
+.list-editor > a,
+.dict-editor > a {
+  display: none;
+}
+
+.list-editor:hover > a,
+.dict-editor:hover > a {
+  display: inline-block;
+}
+*/
+
+pre {
+  word-wrap: break-word;
+}
+
+.pattern-editor-container {
+  position: relative;
+}
+
+.pattern-editor-expander {
+  position: absolute;
+  top: 0px;
+  left: -30px;
+}
+
+.pattern-editor {
+  box-shadow: 0px 0px 4px #000;
+  margin-bottom: 20px;
+  padding: 3px;
+}
+
+.pattern-editor-label {
+  margin-bottom: 10px;
+}
+
+a:hover,
+.pattern-editor-label:hover,
+.text-editor:hover {
+  cursor: pointer;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.buttons a {
+  background-color: #333;
+  border: 1px solid black;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 5px;
+  padding: 2px 5px;
+  text-decoration: none;
+}
+
+.buttons a:hover {
+  background-color: #555;
+}
+
+#tabs {
+  padding: 5px 10px 0 10px;
+  border-bottom: 1px solid black;
+}
+
+#tabs div {
+  background-color: #333;
+  border: 1px solid black;
+  border-radius: 3px 3px 0 0;
+  display: inline-block;
+  margin: 0 5px;
+  padding: 4px 8px;
+  position: relative;
+  top: 1px;
+}
+
+#tabs div:hover,
+#tabs .active {
+  background-color: #555;
+}
+
+#tabs .active {
+  border-bottom-color: #222;
+}
+
+#tab-content > div {
+  padding: 10px;
+}
+
+#upload {
+  border: 5px dashed #333;
+  padding: 5px;
+  margin: 5px;
+}
+
+#upload-drop {
+  font-size: 20px;
+  text-align: center;
+}
+
+#dialog {
+  box-shadow: 0px 0px 24px #000;
+  background-color: #222;
+  font-family: arial;
+  line-height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+}
+
+#dialog > div {
+  padding: 30px;
+  width: 300px;
+}
+
+#dialog h1 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#dialog p {
+  padding: 10px 0;
+}
+
+#dialog ul {
+  list-style-type: disc;
+  margin-left: 15px;
+}
+
+#dialog li {
+  padding: 5px 0;
+}

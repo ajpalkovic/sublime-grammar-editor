@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sublime Text 2 Grammar Editor</title>
+    <link rel='stylesheet' type='text/css' media='all' href='reset.css' />
+    <link rel='stylesheet' type='text/css' media='all' href='application.css' />
+  </head>
+  <body>
+    <div id='dialog'>
+      <div>
+        <h1>Sublime Grammar Editor</h1>
+        <ul>
+          <li>Drag any file into the upload section above to begin editing it.</li>
+          <li>Click any field in the editor to edit it.  You can also use Tab and Shift+Tab to navigate through the fields.</li>
+          <li>The editor will take care of encoding characters like &lt; and &gt; for you.</li>
+          <li>As you edit the file, your changes will be saved automatically.</li>
+          <li>The editor never uploads anything to any servers, all editing takes place in your browser.</li>
+        </ul>
+      </div>
+    </div>
+    <div id='upload'>
+      <div id='upload-drop'>Drop Grammar Files Here to Edit</div>
+      <div id='upload-file'>Or Choose a File Here: <input type='file'></div>
+    </div>
+    <div id='tabs'></div>
+    <div id='tab-content'></div>
+    <script src='http://code.jquery.com/jquery-1.7.1.js'></script>
+    <script src='extensions.js'></script>
+    <script src='cookie.js'></script>
+    <script src='haml2.js'></script>
+    <!-- settings -->
+    <script src='views.js'></script>
+    <script src='converters.js'></script>
+    <script src='application.js'></script>
+  </body>
+</html>

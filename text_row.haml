@@ -1,0 +1,5 @@
+@{multiline: false, key: null}
+.row
+  .row-inner.text-row
+    %span.label{'data-key': key || label}= label
+    = $.views.text_editor.render({value: value, multiline: multiline})

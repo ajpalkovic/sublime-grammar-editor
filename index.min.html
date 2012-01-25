@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sublime Text 2 Grammar Editor</title>
+    <style>html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}</style>
+    <style>body {
+  background: #222;
+  color: #ccc;
+  font-family: consolas, monospace;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+  line-height: 18px;
+  text-shadow: 1px 1px #111;
+}
+
+input[type=text],
+textarea,
+select {
+  border: 1px solid #111;
+  font-size: 15px;
+  width: 95%;
+  background: #444;
+  color: #fff;
+  font-family: consolas, monospace;
+  background-image: -moz-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  background-image: -webkit-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-shadow: 1px 1px 1px #333;
+  -moz-box-shadow: 1px 1px 1px #333;
+  -webkit-box-shadow: 1px 1px 1px #333;
+  margin: 0;
+  padding: 2px;
+  border-radius: 5px;
+}
+
+input[type=text]:focus,
+textarea:focus,
+select:focus {
+  /*outline-color: #c00;*/
+  outline: none;
+}
+
+textarea {
+  background-image: -moz-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+  background-image: -webkit-linear-gradient(top, rgb(34, 34, 34) 0%, rgb(51, 51, 51) 5%);
+}
+
+input[type=submit] {
+  width: auto;
+  padding: 0.25em 1em;
+  line-height: 1.5em;
+  background-image: -moz-linear-gradient(top, rgb(170, 0, 0) 0%, rgb(102, 0, 0) 100%);
+  background-image: -webkit-linear-gradient(top, rgb(170, 0, 0) 0%, rgb(102, 0, 0) 100%);
+  border: 2px solid #c00;
+  text-shadow: 0 0 2px #300;
+  font-weight: bold;
+  box-shadow: 1px 1px 3px #000;
+  -moz-box-shadow: 1px 1px 3px #000;
+  -webkit-box-shadow: 1px 1px 3px #000;
+  margin-right: 0.5em;
+}
+
+.label,
+.dict-entry-key {
+  display: block;
+  color: #777;7
+  padding: 3px 0 4px 0;
+  width: 200px;
+}
+
+.captures-row .dict-entry-key {
+  width: 50px;
+}
+
+.text-editor,
+.dict-entry-value {
+  display: block;
+  box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+}
+
+.row {
+  padding: 3px;
+}
+
+.row,
+.buttons a,
+#tabs div {
+  transition: all 0.218s;
+  -moz-transition: all 0.218s;
+  -webkit-transition: all 0.218s;
+}
+.text-row,
+.dict-entry,
+.respoitory .dict-entry .dict-entry {
+  display: box;
+  display: -moz-box;
+  display: -webkit-box;
+  box-align: stretch;
+  -moz-box-align: stretch;
+  -webkit-box-align: stretch;
+  box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  width: 100%;
+}
+
+.repository .dict-entry {
+  display: block;
+}
+
+.repository > .dict-editor {
+  margin-left: 0;
+}
+
+.repository > .dict-editor > .dict-entries > .row > .dict-entry > .dict-entry-value {
+  margin-left: 30px;
+}
+
+.list-editor,
+.dict-editor {
+  margin-left: 30px;
+}
+
+.active-row {
+  background-color: #333;
+}
+
+.text-editor-value {
+  padding: 3px 4px;
+}
+
+.blank {
+  color: #555;
+}
+
+a {
+  color: #ccc;
+  display: inline-block;
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+/*
+.list-editor > a,
+.dict-editor > a {
+  display: none;
+}
+
+.list-editor:hover > a,
+.dict-editor:hover > a {
+  display: inline-block;
+}
+*/
+
+pre {
+  word-wrap: break-word;
+}
+
+.pattern-editor-container {
+  position: relative;
+}
+
+.pattern-editor-expander {
+  position: absolute;
+  top: 0px;
+  left: -30px;
+}
+
+.pattern-editor {
+  box-shadow: 0px 0px 4px #000;
+  margin-bottom: 20px;
+  padding: 3px;
+}
+
+.pattern-editor-label {
+  margin-bottom: 10px;
+}
+
+a:hover,
+.pattern-editor-label:hover,
+.text-editor:hover {
+  cursor: pointer;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.buttons a {
+  background-color: #333;
+  border: 1px solid black;
+  border-radius: 3px;
+  display: inline-block;
+  margin: 0 5px;
+  padding: 2px 5px;
+  text-decoration: none;
+}
+
+.buttons a:hover {
+  background-color: #555;
+}
+
+#tabs {
+  padding: 5px 10px 0 10px;
+  border-bottom: 1px solid black;
+}
+
+#tabs div {
+  background-color: #333;
+  border: 1px solid black;
+  border-radius: 3px 3px 0 0;
+  display: inline-block;
+  margin: 0 5px;
+  padding: 4px 8px;
+  position: relative;
+  top: 1px;
+}
+
+#tabs div:hover,
+#tabs .active {
+  background-color: #555;
+}
+
+#tabs .active {
+  border-bottom-color: #222;
+}
+
+#tab-content > div {
+  padding: 10px;
+}
+
+#upload {
+  border: 5px dashed #333;
+  padding: 5px;
+  margin: 5px;
+}
+
+#upload-drop {
+  font-size: 20px;
+  text-align: center;
+}
+
+#dialog {
+  box-shadow: 0px 0px 24px #000;
+  background-color: #222;
+  font-family: arial;
+  line-height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+}
+
+#dialog > div {
+  padding: 30px;
+  width: 300px;
+}
+
+#dialog h1 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#dialog p {
+  padding: 10px 0;
+}
+
+#dialog ul {
+  list-style-type: disc;
+  margin-left: 15px;
+}
+
+#dialog li {
+  padding: 5px 0;
+}
+</style>
+  </head>
+  <body>
+    <div id='dialog'>
+      <div>
+        <h1>Sublime Grammar Editor</h1>
+        <ul>
+          <li>Drag any file into the upload section above to begin editing it.</li>
+          <li>Click any field in the editor to edit it.  You can also use Tab and Shift+Tab to navigate through the fields.</li>
+          <li>The editor will take care of encoding characters like &lt; and &gt; for you.</li>
+          <li>As you edit the file, your changes will be saved automatically.</li>
+          <li>The editor never uploads anything to any servers, all editing takes place in your browser.</li>
+        </ul>
+      </div>
+    </div>
+    <div id='upload'>
+      <div id='upload-drop'>Drop Grammar Files Here to Edit</div>
+      <div id='upload-file'>Or Choose a File Here: <input type='file'></div>
+    </div>
+    <div id='tabs'></div>
+    <div id='tab-content'></div>
+    <script src='http://code.jquery.com/jquery-1.7.1.js'></script>
+    <script>/**
+ * Essentially copies an array.
+ */
+function $A(iterable) {
+  if (!iterable) return [];
+  // Safari <2.0.4 crashes when accessing property of a node list with property accessor.
+  // It nevertheless works fine with `in` operator, which is why we use it here
+  if ('toArray' in Object(iterable)) return iterable.toArray();
+  var length = iterable.length || 0, results = new Array(length);
+  while (length--) results[length] = iterable[length];
+  return results;
+}
+Array.from = $A;
+
+/**
+ * Splits a string by whitespace, returning an array of the bits.
+ */
+function $w(string) {
+  return string.strip().split(/\s+/);
+}
+
+var Class = {
+  create: function(parent, methods) {
+    if(methods === undefined) {
+      methods = parent;
+    } else {
+      var subclass = function() { };
+      subclass.prototype = parent.prototype;
+      constructor.prototype = new subclass;
+    }
+
+    for(var key in methods) {
+      if(methods.hasOwnProperty(key)) {
+        methods.initialize.prototype[key] = methods[key];
+      }
+    }
+
+    methods.initialize.prototype.constructor = methods.initialize;
+
+    return methods.initialize;
+  }
+};
+
+(function($) {
+  $.extend(Function.prototype, {
+    bind: function() {
+      if (arguments.length < 2 && arguments[0] === undefined) return this;
+      var __method = this, args = $A(arguments), object = args.shift();
+      return function() {
+        return __method.apply(object, args.concat($A(arguments)));
+      }
+    },
+
+    bindEvent: function() {
+      if (arguments.length < 2 && arguments[0] === undefined) return this;
+      var __method = this, args = $A(arguments), object = args.shift();
+      return function() {
+        return __method.apply(object, [$(this)].concat(args.concat($A(arguments))));
+      }
+    }
+  });
+  Function.prototype.wrap = Function.prototype.bind;
+
+  RegExp.prototype.match = RegExp.prototype.test;
+  RegExp.escape = function(str) {
+    return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
+  };
+
+  $.extend(jQuery, {
+    invoke: function(elems, method) {
+      var args = $A(arguments).slice(1);
+      return $.map(elems, function(value) {
+        return value[method].call(value, args);
+      });
+    },
+
+    pluck: function(elems, property) {
+      var c = 0, length = elems.length, results = [];
+      for(; c < length; c++) {
+        results.push(elems[c][property]);
+      }
+      return results;
+    }
+  });
+
+  var methods = {
+    invoke: function( callback ) {
+      return $.invoke(this, callback);
+    },
+
+    pluck: function( property ) {
+      return $.pluck(this, property);
+    },
+
+    uniq: function() {
+      return $.unique(this);
+    }
+  };
+
+  $.extend(jQuery.prototype, methods);
+  $.extend(Array.prototype), methods;
+
+  Array.prototype.remove = function(from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+  };
+
+  $.extend(String.prototype, {
+    trim: String.prototype.trim || function() {
+      var str = this.replace(/^\s\s*/, ''),
+      ws = /\s/, i = str.length;
+      while (ws.test(str.charAt(--i))) {}
+      return str.slice(0, i + 1);
+    },
+
+    startsWith: function(pattern, ignoreCase) {
+      return ignoreCase ? this.toLowerCase().startsWith(pattern.toLowerCase()) : this.indexOf(pattern) === 0;
+    },
+
+    endsWith: function(pattern, ignoreCase) {
+      if(ignoreCase)
+        return this.toLowerCase().endsWith(pattern.toLowerCase());
+      var d = this.length - pattern.length;
+      return d >= 0 && this.lastIndexOf(pattern) === d;
+    },
+
+    gsub: function(pattern, replacement) {
+      var result = [], source = this, match;
+
+      while (source.length > 0) {
+        if (match = source.match(pattern)) {
+          result.push(source.slice(0, match.index), replacement(match), source.slice(match.index + match[0].length));
+        } else {
+          result.push(source);
+          source = '';
+        }
+      }
+      return result.join('');
+    },
+
+    escapeHTML: function() {
+      var self = arguments.callee;
+      self.text.data = this;
+      return self.div.innerHTML;
+    },
+
+    empty: function() {
+      return this == '';
+    },
+
+    blank: function() {
+      return /^\s*$/.test(this);
+    },
+
+    count: function(text) {
+      if(typeof text === 'string') {
+        var count = 0, start = 0, delta = text.length;
+        while(true) {
+          var index = this.indexOf(text, start);
+          if(index < 0) break;
+
+          count++;
+          start = index+delta;
+        }
+        return count;
+      } else {
+        var count = 0, str = this;
+        while(true) {
+          var match = str.match(text);
+          if(!match) break;
+
+          count++;
+          str = str.slice(match.index + match[0].length);
+        }
+        return count;
+      }
+    },
+
+    iterate: function(regex, callback) {
+    var str = this, start = 0;
+      while(true) {
+        var match = str.match(regex);
+        if(!match) break;
+
+        callback(match[0], match.index+start, match);
+
+        start += match.index + match.length;
+        str = str.slice(match.index + match[0].length);
+      }
+    }
+  });
+  String.prototype.strip = String.prototype.trim;
+
+  $.extend(Math, {
+    random: function(min, max) {
+      var rand = this._random();
+      if (arguments.length == 0)
+        return rand;
+
+      if (arguments.length == 1)
+        var max = min, min = 0;
+
+      return Math.floor(rand * (max-min+1)+min);
+    },
+    _random: Math.random
+  });
+
+  $.extend(Number.prototype, {
+    toPaddedString: function(length, radix) {
+      var string = this.toString(radix || 10);
+      return '0'.times(length - string.length) + string;
+    }
+  });
+
+  $.each($w('abs round ceil floor'), function(){
+    var method = this;
+    Number.prototype[method] = function() { return Math[method].apply(this, arguments); }
+  });
+})(jQuery);
+</script>
+    <script>/**
+ * jQuery Cookie plugin
+ *
+ * Copyright (c) 2010 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
+(function($) {
+    $.cookie = function(key, value, options) {
+
+        // key and at least value given, set cookie...
+        if (arguments.length > 1 && (!/Object/.test(Object.prototype.toString.call(value)) || value === null || value === undefined)) {
+            options = $.extend({}, options);
+
+            if (value === null || value === undefined) {
+                options.expires = -1;
+            }
+
+            if (typeof options.expires === 'number') {
+                var days = options.expires, t = options.expires = new Date();
+                t.setDate(t.getDate() + days);
+            }
+
+            value = String(value);
+
+            return (document.cookie = [
+                encodeURIComponent(key), '=', options.raw ? value : encodeURIComponent(value),
+                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                options.path    ? '; path=' + options.path : '',
+                options.domain  ? '; domain=' + options.domain : '',
+                options.secure  ? '; secure' : ''
+            ].join(''));
+        }
+
+        // key and possibly options given, get cookie...
+        options = value || {};
+        var decode = options.raw ? function(s) { return s; } : decodeURIComponent;
+
+        var pairs = document.cookie.split('; ');
+        for (var i = 0, pair; pair = pairs[i] && pairs[i].split('='); i++) {
+            if (decode(pair[0]) === key) return decode(pair[1] || ''); // IE saves cookies with empty string as "c; ", e.g. without "=" as opposed to EOMB, thus pair[1] may be undefined
+        }
+        return null;
+    };
+})(jQuery);
+</script>
+    <script>var HamlView = (function ($) {
+  var undefined, options = {
+    xhtml: true
+  };
+
+  var escaperNode = $("<div></div>");
+
+  window.h = function(str) {
+    return escaperNode.text(str || '').html().replace(/\"/g, "&quot;").replace(/\'/g, "&apos;");
+  };
+
+  var haml = function(name, view) {
+    this.name = name;
+    this.text = view;
+  };
+
+  $.extend(haml, {
+    regex: {
+      interpolation: /(^|.|\r|\n)(#\{(.*?)\})/,
+      simpleInterpolation: /#\{(.*?)\}/g,
+      // first group: %tag.class or .class
+      // second group is the only characters that can immediately follow a tag
+      // second group: the stuff after a tag
+      tag: /^((?:%[a-z0-9_:\-$]+(?:[.#][a-z0-9_:\-$]+)*)|(?:(?:[.#][a-z0-9_:\-$]+)+))(.*)$/i,
+      cssClass: /\.([a-z0-9_:\-$]+)/gi,
+      id: /#([a-z0-9_:\-$]+)/gi,
+      tagName: /%([a-z0-9_:\-$]+)/i,
+      blankLine: /^\s*$/,
+      lineWhitespace: /^(\s+)(.*)$/,
+      onlySpace: /^[ ]+$/,
+      onlyTab: /^\t+$/,
+      multilineRuby: /(.*)\|\s*$/,
+      // matches a key in an json or ruby hash
+      lvalue: /^\s*\:?['"a-z0-9_\-$]+\s*(\:|=>)/i,
+      attributeName: /^\s*["':]\s*([a-z0-9_$\-:]+)\s*["']?/i,
+      // matches an attributes that hash that only contains a variable in it
+      attributesVariable: /^\s*([a-z0-9_\-$]+)\s*$/i,
+      // match a keyword, followed by the end of line or (a space or paren and then the rest of the string)
+      autoBracket: /^\s*(for|switch|while|else\s+if|if|else)(?:$|((?:\s|\().*)$)/,
+      // matches for c in 0..10
+      forIn: /^\s*([a-z0-9_$\-]+)\s+in\s+(.+)\.\.(.+)/i,
+      // match for item in array using c
+      forInArray: /^\s*([a-z0-9_$\-]+)\s+in\s+([^}]+)/i,
+      forInUsing: /\s+using\s+([a-z0-9_$\-]+)/i
+    },
+
+    autocloseTags: {'img': true, 'br': true, 'hr': true, 'input': true, 'meta': true, 'link': true},
+    multilineStopCharacters: {'.': true, '#': true, '%': true, '=': true, '-': true},
+
+    errors: {
+      mixedIndentation: "Found tabs and spaces mixed at the beginning of a line.",
+      unevenSpacing: "Found an uneven amount of space at the beginning of a line.",
+      indentationFirstLine: "Found whitespace on the first line of content."
+    }
+  });
+
+  var Buffer = makeClass(null, {
+    initialize: function() {
+      this.buffer = [];
+      this.strings = [];
+    },
+
+    code: function() {
+      this.clearStrings();
+      Array.prototype.push.apply(this.buffer, arguments);
+    },
+
+    output: function() {
+      this.clearStrings();
+      var buffer = this.buffer;
+      $.each(arguments, function(ix, arg) {buffer.push('__o.push(', arg, ');\n')});
+    },
+
+    string: function() {
+      Array.prototype.push.apply(this.strings, arguments);
+    },
+
+    interpolatedString: function() {
+      var text, match, beforeMatch;
+      for(var c = 0; c < arguments.length; c++) {
+        text = arguments[c];
+        //most of this comes from prototype's gsub method
+        while (text.length > 0) {
+          match = text.match(haml.regex.interpolation);
+          if (match !== null) {
+            beforeMatch = text.slice(0, match.index);
+            text = text.slice(match.index + match[0].length);
+
+            //check if the text is proceeded by a backslash
+            if (match[1] && match[1] === '\\') {
+              //the backslash will be caught in the string that comes before the match, so we need to remove the last character
+              this.string(beforeMatch, match[2]);
+            } else {
+              this.string(beforeMatch, match[1]);
+              this.output(match[2].substring(2, match[2].length-1));
+            }
+          } else { //if there was no match, or we are at the end, then just add the remaining text
+            this.string(text);
+            text = '';
+          }
+        }
+      }
+    },
+
+    clearStrings: function() {
+      if(this.strings.length === 0) return;
+
+      var str = this.strings.join('');
+      this.strings.length = 0;
+      this.buffer.push('__o.push("', sanitize(str), '");\n');
+    }
+  });
+
+  var Term = makeClass(null, {
+    initialize: function(parent, data) {
+      this.data = data;
+      this.attach(parent);
+    },
+
+    attach: function(parent) {
+      this.parent = parent;
+
+      if(parent) {
+        this.view = parent.view;
+        parent.children.push(this);
+      }
+
+      this.children = []
+    },
+
+    toJs: function(output) {
+      this.processChildren(output);
+    },
+
+    processChildren: function(output) {
+      for(var c = 0; c < this.children.length; c++) {
+        this.children[c].toJs(output);
+      }
+    }
+  });
+
+  var Root = makeClass(Term, {
+    toJs: function() {
+      var output = new Buffer();;
+      this.processChildren(output);
+      output.clearStrings();
+      return output.buffer.join('');
+    }
+  });
+
+  var HamlString = makeClass(Term, {
+    toJs: function(output) {
+      output.string(this.data);
+    }
+  });
+
+  var HamlInterpolatedString = makeClass(Term, {
+    toJs: function(output) {
+      output.interpolatedString(this.data);
+    }
+  });
+
+  var CodeOutput = makeClass(Term, {
+    initialize: function(parent, data) {
+      this.data = data.join('');
+
+      if(this.data.charAt(0) === '=') return new HamlInterpolatedString(parent, ltrim(this.data.substring(1)));
+      this.attach(parent);
+    },
+
+    toJs: function(output) {
+      output.output(this.data);
+    }
+  });
+
+  var Code = makeClass(Term, {
+    initialize: function(parent, data) {
+      data = data.join('');
+      var match = haml.regex.autoBracket.exec(data);
+      if(match !== null) {
+        haml.expression = new WrappedCode(parent, data, match[1], match[2]);
+        return;
+      }
+
+      this.data = data;
+      this.canIndent = true;
+      this.attach(parent);
+    },
+
+    toJs: function(output) {
+      output.code(this.data);
+      this.processChildren(output);
+    }
+  });
+
+  var WrappedCode = makeClass(Term, {
+    initialize: function(parent, data, keyword, body) {
+      this.data = data;
+      this.keyword = keyword;
+      this.canIndent = true;
+      this.attach(parent);
+
+      body = body || '';
+      var idx = body.indexOf("{");
+      if(idx >= 0) {
+        this.body = body.substring(idx);
+        this.condition = body.substring(0, idx-1);
+      } else {
+        this.body = '';
+        this.condition = body;
+      }
+
+      // remove parentheses wrapping the if/for statement
+      this.condition = ltrim(this.condition);
+      idx = findEnd(this.condition, ')', 1);
+      if(idx >= 0 && idx < this.condition.length) {
+        this.body = this.condition.substring(idx+1)+this.body;
+        this.condition = this.condition.substring(this.condition.indexOf('(')+1, idx);
+      }
+
+      // detect special for loops
+      this.forLoop();
+    },
+
+    forLoop: function() {
+      var match = haml.regex.forIn.exec(this.condition);
+      if(match !== null) {
+        this.condition = $t("var #{name} = #{start}; #{name} < #{end}; #{name}++", {name: match[1], start: match[2], end: match[3]});
+      } else {
+        match = haml.regex.forInArray.exec(this.condition);
+        if(match === null) return;
+        var count = ++WrappedCode.count;
+
+        var arrayValue = match[2];
+        var counterName = "forEachCounter"+count;
+        var itemName = match[1];
+
+        match = haml.regex.forInUsing.exec(arrayValue);
+        if(match !== null) {
+          arrayValue = arrayValue.substring(0, match.index);
+          counterName = match[1];
+        }
+
+        this.condition = $t("var #{arrayName} = #{arrayValue}, #{lengthName} = #{arrayName}.length, #{counterName} = 0, #{itemName} = #{arrayName}[0]; "+
+          "#{counterName} < #{lengthName}; " +
+          "#{itemName} = #{arrayName}[++#{counterName}]", {
+            lengthName: "forEachLength"+count,
+            arrayName: "forEachArray"+count,
+            arrayValue: arrayValue, itemName: itemName, counterName: counterName
+          }
+        );
+      }
+    },
+
+    toJs: function(output) {
+      if(this.keyword === 'else') output.code('else {\n');
+      else output.code(this.keyword, '(', this.condition, ')', '{\n');
+        output.code(this.body);
+        this.processChildren(output);
+      output.code('}\n');
+    }
+  });
+  WrappedCode.count = 0;
+
+  var Defaults = makeClass(Term, {
+    toJs: function(output) {
+      this.view.defaults = this.data;
+    }
+  });
+
+  var Doctype = makeClass(Term, {
+    toJs: function(output) {
+      var line = $.trim(this.data).toLowerCase();
+      var bits = line.split(/\s+/);
+
+      if(line.indexOf('xml') === 0) {
+        var encoding = bits[1] || "utf-8";
+        output.string("<?xml version='1.0' encoding='", encoding, "' ?>");
+      } else if(options.html5) {
+        output.string('<!DOCTYPE html>');
+      } else {
+        var version = bits[1], type = bits[0];
+        if(!parseFloat(bits[1], 10) && !!parseFloat(bits[0], 10)) {
+          version = bits[0];
+          type = bits[1];
+        }
+
+        if(options.xhtml) {
+          if(version === '1.1') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
+          else if(version === '5') output.string('<!DOCTYPE html>');
+          else if(type === 'strict') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+          else if(type === 'frameset') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">');
+          else if(type === 'mobile') output.string('<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">');
+          else if(type === 'basic') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.1//EN" "http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd">');
+          else output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">');
+        } else {
+          if(type === 'strict') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
+          else if(type === 'frameset') output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">');
+          else output.string('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
+        }
+      }
+    }
+  });
+
+  var Comment = makeClass(Term, {
+    initialize: function(parent, data) {
+      this.data = data;
+      this.attach(parent);
+
+      this.start = '<!--';
+      this.end = ' -->';
+
+      if(this.data.charAt(0) == '[') {
+        var endIndex = findEnd(this.data.substring(1), ']');
+        this.start += this.data.substring(0, endIndex+2)+'>';
+        this.data = this.data.substring(endIndex+2);
+        this.end = ' <![endif]-->'
+      }
+
+      this.canIndent = /^\s*$/.exec(this.data) !== null;
+    },
+
+    toJs: function(output) {
+      if(this.children.length === 0 && this.data.length === 0) return;
+
+      output.string(this.start+" ");
+      output.interpolatedString(this.data);
+      this.processChildren(output);
+      output.string(this.end);
+    }
+  });
+
+  var Tag = makeClass(Term, {
+    initialize: function(parent, data) {
+      this.data = data;
+      this.attach(parent);
+      this.canIndent = true;
+
+      var match = haml.regex.tag.exec(data);
+      var tag = match[1], rest = match[2];
+
+      var match = haml.regex.tagName.exec(tag);
+      if(match === null) this.name = 'div';
+      else this.name = match[1];
+
+      this.id = $.map((tag.match(haml.regex.id) || []), function(str) { return str.substring(1); });
+      this.id = this.id[this.id.length-1];
+      this.classes = $.map((tag.match(haml.regex.cssClass) || []), function(str) { return str.substring(1); });
+      this.attributes = {};
+      this.attributesCount = 0;
+
+      while(rest && rest.length > 0) {
+        var nextChar = rest.charAt(0);
+        switch(nextChar) {
+          case '/': return this.autoclose = true;
+          case ' ':
+            if(haml.regex.blankLine.exec(rest)) {
+              this.canIndent = true;
+              return;
+            }
+            return new HamlInterpolatedString(this, rest.substring(1));
+          case '=': return this.view.parser.rubyString(this, CodeOutput, rest.substring(1));
+          case '(':
+            var index = findEnd(rest, ')', 1);
+            var str = rest.substring(1, index);
+            rest = rest.substring(index+1);
+            if(!this.parseAttributesVariable(str)) {
+              this.parseAttributes(str, ' ', '=');
+            }
+            break;
+          case '{':
+            var index = findEnd(rest, '}', 1);
+            var str = rest.substring(1, index);
+            rest = rest.substring(index+1);
+
+            if(!this.parseAttributesVariable(str)) {
+              var match = haml.regex.lvalue.exec(str);
+              if(match === null) throw this.view.error("Error while parsing the attributes hash for a tag.");
+              else if(match[1] === ':') this.parseAttributes(str, ',', ':');
+              else if(match[1] === '=>') this.parseAttributes(str, ',', '=>');
+            }
+            break;
+          default: return new HamlInterpolatedString(this, rest);
+        }
+      }
+    },
+
+    parseAttributesVariable: function(str) {
+      var match = haml.regex.attributesVariable.exec(str);
+      if(match === null) return false;
+      this.attributesVariableName = match[1];
+      return true;
+    },
+
+    parseAttributes: function(str, attributeSeparator, nameSeparator) {
+      while(str.length > 0) {
+        var attributeEnd = findEnd(str, attributeSeparator);
+        var attribute = str.substring(0, attributeEnd);
+        var name = findEnd(attribute, nameSeparator);
+
+        var nameStr = $.trim(attribute.substring(0, name));
+        var match = haml.regex.attributeName.exec(nameStr);
+        if(match !== null) nameStr = match[1];
+
+        var valueStr = $.trim(attribute.substring(name+nameSeparator.length));
+        if(valueStr.charAt(0) === ':') valueStr = '"'+valueStr.substring(1)+'"';
+
+        this.attributes[nameStr] = valueStr;
+        this.attributesCount += 1;
+        str = str.substring(attributeEnd+1);
+      }
+    },
+
+    mergeAttributes: function(name, values) {
+      if(values.length === 0) return;
+      var combinedClasses = values.join(' ');
+      if(!this.attributes[name] || this.attributes[name].length === 0) {
+        this.attributes[name] = $t("'#{values.join(\' \')}'", {values: values});
+      } else {
+        var expression = ['(', this.attributes[name], ')'].join('');
+        this.attributes[name] = $t('"#{values.join(\' \')}" + " " + ((#{attributes[name]}) || "")', {attributes: this.attributes, name: name, values: values});
+      }
+    },
+
+    toJs: function(output) {
+      this.mergeAttributes('class', this.classes);
+      if(!this.attributes.id && this.id) {
+        this.attributes.id = '"'+this.id+'"';
+        this.attributesCount++;
+      }
+
+      var attributesStr = [];
+      for(var key in this.attributes) {
+        attributesStr.push('"'+key+'": '+this.attributes[key]);
+      }
+      var attributesStr = $t('{#{attributesStr.join(\',\')}}', {attributesStr: attributesStr});
+      var autoclose = this.children.length === 0 && (haml.autocloseTags[this.name] || this.autoclose);
+
+      if(this.attributesCount === 0 && this.classes.length === 0 && !this.attributesVariableName) {
+        if(autoclose) {
+          output.string('<', this.name, ' />');
+        } else {
+          output.string('<', this.name, '>');
+          this.processChildren(output);
+          output.string('</', this.name, '>');
+        }
+      } else {
+        output.code($t('__this.makeTag(\"<#{name}\", \"#{end}\", #{attributes}, #{attributesVariable});', {
+          name: this.name,
+          end: autoclose ? ' />' : '>',
+          attributes: attributesStr, attributesVariable: this.attributesVariableName || "undefined"
+        }));
+
+        if(!autoclose) {
+          this.processChildren(output);
+          output.string('</', this.name, '>');
+        }
+      }
+    }
+  });
+
+  var Parser = makeClass(null, {
+    initialize: function(view) {
+      this.view = view;
+      this.lines = this.view.text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+
+      this.line = undefined;
+      this.lineIndex = -1;
+      this.level = 0;
+      this.indentation = {
+        amount: 2,
+        character: ' ',
+        notCharacter: '\t'
+      };
+
+      this.detectIndentation();
+      this.nextLine();
+    },
+
+    detectIndentation: function() {
+      var lines = [];
+      for(var c = 0; c < this.lines.length; c++) {
+        if(!haml.regex.blankLine.exec(this.lines[c])) {
+          lines.push(this.lines[c]);
+        }
+      }
+      this.lines = lines;
+
+      for(var c = 0; c < this.lines.length; c++) {
+        var line = this.lines[c];
+        var match = haml.regex.lineWhitespace.exec(line);
+        if(match == null) continue;
+
+        var whitespace = match[1];
+        if(haml.regex.onlyTab.exec(whitespace)) {
+          this.indentation.character = '\t';
+          this.indentation.notCharacter = ' ';
+        } else if(!haml.regex.onlySpace.exec(whitespace)) throw this.view.error(haml.errors.mixedIndentation);
+        this.indentation.amount = whitespace.length;
+        break;
+      }
+    },
+
+    nextLine: function(ignoreWhitespace) {
+      this.line = this.lines[++this.lineIndex];
+      if(this.line === undefined) return;
+      if(ignoreWhitespace) return;
+
+      var match = haml.regex.lineWhitespace.exec(this.line);
+      if(match === null) {
+        this.level = 0;
+        return;
+      }
+
+      var whitespace = match[1];
+      this.line = match[2];
+
+      if(whitespace.indexOf(this.indentation.notCharacter) >= 0) throw this.view.error(haml.errors.mixedIndentation);
+      if(whitespace.length % this.indentation.amount !== 0) throw this.view.error(haml.errors.unevenSpacing);
+
+      this.level = whitespace.length / this.indentation.amount;
+    },
+
+    previousLine: function() {
+      this.lineIndex -= 1;
+    },
+
+    parse: function(parent, indentLevel) {
+      while(true) {
+        if(this.level < indentLevel) return;
+        if(this.line === undefined) return;
+
+        if(this.level > indentLevel) throw this.error("Something was nested inside an element which cannot contain children.");
+
+        var expression = this.compileLine(parent);
+        if(haml.expression) {
+          expression = haml.expression;
+          haml.expression = undefined;
+        }
+        this.nextLine();
+
+        if(!expression || expression.length) continue;
+        if(expression.canIndent) this.parse(expression, indentLevel+1);
+      }
+    },
+
+    compileLine: function(parent) {
+      var line = this.line;
+      var first = line.charAt(0);
+
+      switch(first) {
+        case '@': return new Defaults(parent, line.substring(1));
+        case '\\': return [new HamlString(parent, line.charAt(1)), new HamlInterpolatedString(parent, line.substring(2))];
+        case '/': return new Comment(parent, line.substring(1));
+        case '!':
+          if(line.indexOf('!!!') === 0) return new Doctype(parent, line.substring(3));
+          break;
+        case '%':
+        case '.':
+          return new Tag(parent, line);
+        case '#':
+          if(line.charAt(1) === '{') return new HamlInterpolatedString(parent, line);
+          return new Tag(parent, line);
+        case '=': return this.rubyString(parent, CodeOutput);
+        case '-':
+          if(line.charAt(1) === '#') return;
+          return this.rubyString(parent, Code);
+      }
+
+      // default case
+      return new HamlInterpolatedString(parent, line);
+    },
+
+    rubyString: function(parent, klass, line) {
+      if(!line) line = this.line.substring(1);
+      var lines = [];
+      var first = true;
+      while(true) {
+        if(line === undefined) break;
+
+        if(!first && haml.multilineStopCharacters[$.trim(line).charAt(0)]) {
+          this.previousLine();
+          break;
+        }
+
+        var match = haml.regex.multilineRuby.exec(line);
+        line = line.substring(0, findEnd(line, "//"));
+        if(match == null) {
+          if(first) lines.push(line);
+          else this.previousLine();
+          break;
+        }
+        lines.push(match[1]);
+
+        this.nextLine(true);
+        first = false;
+        line = this.line;
+      }
+
+      return new klass(parent, lines);
+    }
+  });
+
+  haml.prototype = {
+    compile: function(force) {
+      //only compile the view once
+      if(this.compiledView !== undefined && !force) return;
+
+      this.defaults = '';
+      this.root = new Root(undefined);
+      this.root.view = this;
+      this.parser = new Parser(this);
+      this.parser.parse(this.root, 0);
+      this.compiledView = this.root.toJs();
+      this.evalCode();
+    },
+
+    /**
+     * Compiles and runs the view
+     * data and helpers are two objects that can be passed in and the items in their will be available as normal variables in the view
+     */
+    render: function(data, helpers) {
+      if(!data) data = {};
+      if(!helpers) helpers = {};
+      this.compile();
+
+      var _o = this.output;
+      this.output = [];
+      var ret = this.renderFunction(data, helpers);
+      this.output = _o;
+      return ret;
+    },
+
+    /**
+     * Put the code in an anonymous function so it can be eval'd once and then called repeatedly, making it a lot faster.
+     * Any default variable values or values passed to the render function are placed in with blocks so that they are available as local variables.
+     * TODO: Integrate with JSLINT like EJS intelligently did.
+     */
+    evalCode: function() {
+      var defaultsString = '{';
+      if(this.defaults.length > 0) {
+        defaultsString = "var __defaults = "+this.defaults+"; with(__defaults) {";
+      }
+
+      var evalString = "\
+        this.renderFunction = (function($) { \
+          return function(__data, __helpers) { " +
+            defaultsString +
+            " with(__data) { \
+              with(__helpers) { \
+                var __o = this.output, __this = this;\n" +
+                this.compiledView + " \n\
+                return __o.join(\"\"); \
+              } \
+            } \
+            } \
+          } \
+        })(jQuery);";
+      this.debugStr = evalString;
+
+      //console.log("compiling");
+      //console.log(evalString);
+      return eval(evalString);
+    },
+
+    /**
+     * Handles a Haml syntax error
+     */
+    error: function(message) {
+      return $t("Haml Syntax Error: #{message} Line: #{lineNumber} Line: #{line}", {
+        message: message,
+        lineNumber: this.parser.lineIndex,
+        line: this.parser.lines[this.parser.lineIndex].replace(/ /g, '[space]').replace(/\t/g, '[tab]')
+      });
+    },
+
+    makeAttributes: function(attributes) {
+      for(var key in attributes) {
+        var value = attributes[key];
+        if(value === undefined || value === null || value.length === 0) continue;
+        if(key === 'checked' || key === 'selected') {
+          attributes[key] = key;
+        }
+        this.output.push(' ', key, '="', value, '"');
+      }
+    },
+
+    makeTag: function(tagBegin, tagEnd, attributes, moreAttributes) {
+      if(moreAttributes && moreAttributes['class'] && moreAttributes['class'].length > 0 &&
+          attributes['class'] && attributes['class'].length > 0) {
+        attributes['class'] = attributes['class'] + ' ' + moreAttributes['class'];
+        delete moreAttributes['class'];
+      }
+      this.output.push(tagBegin);
+      this.makeAttributes(attributes);
+      if(moreAttributes) this.makeAttributes(moreAttributes);
+      this.output.push(tagEnd);
+    }
+  };
+
+  function ltrim(str) {
+    return str.replace(/^\s+/g, "");
+  }
+  /**
+   * Escapes quotes and backslashes which could cause an injection attack in the generated code
+   */
+  function sanitize(text) {
+    return text.replace(/\\/g, '\\\\').replace(/"/g,  '\\"');
+  }
+
+  //stolen from prototype.js (removed so as to be only dependent on jQuery)
+  function makeClass(parent, methods) {
+    function klass() {
+      this.initialize.apply(this, arguments);
+    }
+
+    if (parent) {
+      var subclass = function() { };
+      subclass.prototype = parent.prototype;
+      klass.prototype = new subclass;
+    }
+
+    for(var name in methods) {
+      klass.prototype[name] = methods[name];
+    }
+
+    klass.prototype.constructor = klass;
+
+    if (!klass.prototype.initialize)
+      klass.prototype.initialize = function() {};
+
+    return klass;
+  }
+
+  // returns the index of needle in string, but ignores occurances of needle inside of parens/quotes/etc
+  function findEnd(str, needle, start) {
+    var chars = {"'": "'", '"': '"', '(': ')', '{': '}', '/': '/', '[': ']'};
+    var stopBalancingChars = {"'": true, '"': true, '/': true};
+
+    var c, len = str.length, cur, first = needle.charAt(0), second = needle.charAt(1), stack = [];
+    str = str.split('');
+
+    for(c = (start||0); c < len; c++) {
+      cur = str[c];
+      //ignore the character immediately after a backslash
+      if(cur === '\\') {
+        c++;
+      } else if(stack.length === 0 && cur === first && (needle.length === 1 || str[c+1] === second)) {
+        break;
+      }
+
+      //if we hit an ', ", or /, then keep iterating until we find the next one indicating the end of the string/regex and ignore everything inside
+      else if(stopBalancingChars[cur]) {
+        if(cur === '/') {
+          if(str[c+1] === '/') return str.length;
+          else continue;
+        }
+
+        c++;
+        while(str[c] != cur && c < len) c += (1 + (str[c] === '\\'));
+      }
+
+      //if there are no elements on the stack, it cant be a closing character
+      //if the closing character on the stack matches this one, then we're done
+      else if(stack.length > 0 && cur === stack[stack.length-1]) {
+        stack.pop();
+      } else if(chars[cur]) {
+        stack.push(chars[cur]);
+      }
+    }
+    return c;
+  }
+
+  var templates = {};
+  function $t(template, data) {
+    data = data || {};
+    //console.log(template);
+    if(!templates[template]) {
+      var code = sanitize(template).replace(haml.regex.simpleInterpolation, '", $1, "');
+      code = ' \
+      $.fxn = (function(__data) { \
+        with(__data) { \
+          return ["'+code+'"].join(""); \
+        } \
+      });';
+
+      //console.log(code);
+      eval(code);
+      templates[template] = $.fxn;
+    }
+
+    return templates[template](data);
+  }
+
+  return haml;
+})(jQuery);
+</script>
+    
+  <script>
+    $.compiled = true;
+    $.views = {};
+    $.views.dict = new HamlView('dict', '@{values: {}, disabled: false}\n.dict-editor\n  .dict-entries\n    - for (var key in values)\n      .row\n        .dict-entry\n          .dict-entry-key\n            = $.views.text_editor.render({value: key})\n          .dict-entry-value\n            = $.views[view].render({value: values[key]})\n  %a.add-dict-entry{:href => \'javascript:void(0);\', :style => disabled ? \'display: none;\' : \'\'} Add Entry\n');
+$.views.grammar = new HamlView('grammar', '.grammar-editor\n  = $.views.text_row.render({label: \'Comment\', key: \'comment\', value: grammar.comment})\n  = $.views.text_row.render({label: \'firstLineMatch\', value: grammar.firstLineMatch})\n  = $.views.text_row.render({label: \'foldingStartMarker\', value: grammar.foldingStartMarker, multiline: true})\n  = $.views.text_row.render({label: \'foldingStopMarker\', value: grammar.foldingStopMarker, multiline: true})\n  = $.views.text_row.render({label: \'Name\', key: \'name\', value: grammar.name})\n  = $.views.text_row.render({label: \'keyEquivalent\', value: grammar.keyEquivalent})\n  = $.views.text_row.render({label: \'scope\', value: grammar.scope})\n  = $.views.text_row.render({label: \'uuid\', value: grammar.uuid})\n  .row\n    %span.label{\'data-key\': \'patterns\'} Patterns\n    = $.views.list.render({view: \'pattern\', values: grammar.patterns || []})\n  .row.repository\n    %span.label{\'data-key\': \'repository\'} Repository\n    = $.views.dict.render({view: \'pattern\', values: grammar.repository || {}})\n');
+$.views.list = new HamlView('list', '@{values: []}\n.list-editor\n  .list-entries\n    - for value in values\n      .list-entry{:draggable => true}\n        = $.views[view].render({value: value})\n  %a.add-list-entry{:href => \'javascript:void(0);\'} Add Entry\n');
+$.views.pattern = new HamlView('pattern', '- var label = value.name || value.contentName || value.include || value.comment || value.match || value.begin || \'Pattern(s)\';\n.pattern-editor-container\n  .pattern-editor-expander [+]\n  .pattern-editor-label= label\n  .pattern-editor{:style => \'display: none;\'}\n    = $.views.text_row.render({label: \'Comment\', key: \'comment\', value: value.comment, multiline: true})\n    = $.views.text_row.render({label: \'Include\', key: \'include\', value: value.include})\n    = $.views.text_row.render({label: \'Scope\', key: \'name\', value: value.name})\n    = $.views.text_row.render({label: \'Content Name\', key: \'contentName\', value: value.contentName})\n    = $.views.text_row.render({label: \'Match Regex\', key: \'match\', value: value.match, multiline: true})\n    .pattern-multi-regex= $.views.text_row.render({label: \'Begin Regex\', key: \'begin\', value: value.begin, multiline: true})\n    .pattern-multi-regex= $.views.text_row.render({label: \'End Regex\', key: \'end\', value: value.end, multiline: true})\n    .row.captures-row\n      %span.label{\'data-key\': \'captures\'} Captures\n      = $.views.dict.render({values: value.captures || {}, view: \'text_editor\'})\n    .row.captures-row.pattern-multi-value{:style => value.begin ? \'\' : \'display: none;\'}\n      %span.label{\'data-key\': \'beginCaptures\'} Begin Captures\n      = $.views.dict.render({values: value.beginCaptures || {}, view: \'text_editor\'})\n    .row.captures-row.pattern-multi-value{:style => value.end ? \'\' : \'display: none;\'}\n      %span.label{\'data-key\': \'endCaptures\'} End Captures\n      = $.views.dict.render({values: value.endCaptures || {}, view: \'text_editor\'})\n    .row\n      %span.label{\'data-key\': \'patterns\'} Patterns\n      = $.views.list.render({view: \'pattern\', values: value.patterns || []})\n    .buttons\n      %a.delete{:href => \'javascript:void(0);\'} Delete\n      %a.up{:href => \'javascript:void(0);\'} Move Up\n      %a.down{:href => \'javascript:void(0);\'} Move Down\n');
+$.views.text_editor = new HamlView('text_editor', '@{multiline: false}\n- value = (value && value.name) || value;\n%span.text-editor\n  %span.text-editor-value{:style => \'display: inline-block;\', :class => !value ? \'blank\' : \'\'}= prepareValue(value)\n  %span.text-editor-input-wrapper{:style => \'display: none;\'}\n    - if multiline\n      %textarea.text-editor-input= h(value)\n    - else\n      %input.text-editor-input{:type => \'text\', :value => h(value)}\n');
+$.views.text_row = new HamlView('text_row', '@{multiline: false, key: null}\n.row\n  .row-inner.text-row\n    %span.label{\'data-key\': key || label}= label\n    = $.views.text_editor.render({value: value, multiline: multiline})\n');
+  </script>
+    <script>(function($) {
+  function loadViews(root, views) {
+    if ($.compiled) return;
+    for (var i = 0; i < views.length; i++) {
+      var value = views[i];
+      loadView(root, value, value + '.haml');
+    }
+  }
+
+  function loadView(root, key, url) {
+    requestsSent++;
+    $.get(url, function(content) {
+      resposnes++;
+      root[key] = new HamlView(url, content);
+    }, 'text');
+  }
+
+  var requestsSent = 0, resposnes = 0;
+  var views = $w('text_editor grammar list pattern dict text_row');
+  $.views = $.views || {};
+  loadViews($.views, views);
+
+  $.waitForViews = function(callback) {
+    var interval = setInterval(function() {
+      if ($.compiled || (requestsSent > 0 && requestsSent == resposnes)) {
+        clearInterval(interval);
+        callback();
+      }
+    }, 10);
+  };
+})(jQuery);
+</script>
+    <script>function xmlToJson(xmlString) {
+  var xml = $(xmlString);
+  var plist = $($.grep(xml, function(cur) { return cur.tagName == 'PLIST'; }));
+  if (!plist.length) throw 'Could not find plist in xml. Ensure the xml file has a plist tag at the top level.';
+  var topDict = plist.children().first();
+  return xmlTagToJson(topDict);
+}
+
+function xmlTagToJson(xml) {
+  if (!xml || !xml.length) return '';
+
+  var children = xml.children();
+  var tag = xml[0].tagName.toLowerCase();
+  var ret;
+  if (tag == 'dict') {
+    ret = {};
+    if (children.length % 2 !== 0) throw 'A dictionary element did not have an even number of child nodes.';
+    for (var i = 0; i < children.length; i += 2) {
+      var key = $(children[i]).text();
+      var value = xmlTagToJson($(children[i+1]));
+      ret[key] = value;
+    }
+  } else if (tag == 'array') {
+    ret = [];
+    for (var i = 0; i < children.length; i++) {
+      ret.push(xmlTagToJson($(children[i])));
+    }
+  } else {
+    ret = xml.text();
+  }
+  return ret;
+}
+
+function domToJson(tab) {
+  var json = {};
+  var rows = $('.grammar-editor > .row', tab[0]);
+  for (var i = 0; i < rows.length; i++) {
+    var key = $('.label', rows[i]).first().data('key');
+    var value = domRowToJson(rows[i]);
+    if (value) json[key] = value;
+  }
+  return json;
+}
+
+function domRowToJson(row) {
+  row = $(row);
+  var children = row.children();
+  var node = children.last();
+
+  if (children.length === 1 && node.hasClass('text-row') || node.hasClass('text-editor')) {
+    return $('input, textarea', children[0]).val();
+  }
+
+  if (node.hasClass('list-editor')) {
+    var rows = node.children('.list-entries').first().children('.list-entry');
+    var ret = [];
+    for (var i = 0; i < rows.length; i++) {
+      var value = domRowToJson(rows[i]);
+      if (value) ret.push(value);
+    }
+    if (ret.length === 0) return;
+    return ret;
+  }
+
+  if (node.hasClass('dict-editor')) {
+    var rows = node.children('.dict-entries').children('.row');
+    var ret = {};
+    var empty = true;
+    for (var i = 0; i < rows.length; i++) {
+      var cur = $(rows[i]);
+      var key = cur.children('.dict-entry').children('.dict-entry-key').find('input, textarea').val();
+      var value = domRowToJson(cur.children('.dict-entry').children('.dict-entry-value'));
+      if (value) {
+        ret[key] = value;
+        empty = false;
+      }
+    }
+    if (empty) return;
+    return ret;
+  }
+
+  if (node.hasClass('pattern-editor-container')) {
+    var rows = node.children('.pattern-editor').children('.row').add(
+        node.children('.pattern-editor').children('.pattern-multi-regex').children('.row'));
+    var ret = {};
+    var empty = true;
+    for (var i = 0; i < rows.length; i++) {
+      var key = $('.label', rows[i]).first().data('key');
+      var value = domRowToJson(rows[i]);
+      if (value) {
+        ret[key] = value;
+        empty = false;
+      }
+    }
+    if (empty) return;
+    return ret;
+  }
+
+  throw 'Can\'t determine type.';
+}
+
+function jsonToXml(json) {
+  var buffer = [
+    '<?xml version="1.0" encoding="UTF-8"?>\n',
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n',
+    '<plist version="1.0">\n'
+  ];
+
+  var indent = {0: ''};
+  for (var i = 1; i < 10; i++) {
+    indent[i] = indent[i - 1] + '  ';
+  }
+  jsonNodeToXml(json, buffer, indent);
+  buffer.push('</plist>\n');
+  return buffer.join('');
+}
+
+function jsonNodeToXml(node, buffer, indent, level) {
+  function e(str) {
+    return (str || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  if (node instanceof Array) {
+    buffer.push(indent[level], '<array>\n');
+    for (var i = 0; i < node.length; i++) {
+      jsonNodeToXml(node[i], buffer, indent, level + 1);
+    }
+    buffer.push(indent[level], '</array>\n');
+  }
+
+  else if (typeof node === 'string') {
+    buffer.push(indent[level], '<string>', e(node));
+    if (node.indexOf('\n') >= 0) {
+      buffer.push('\n', indent[level]);
+    }
+    buffer.push('</string>\n');
+  }
+
+  else {
+    buffer.push(indent[level], '<dict>\n');
+    for (var key in node) {
+      buffer.push(indent[level + 1], '<key>', e(key), '</key>\n');
+      jsonNodeToXml(node[key], buffer, indent, level + 1);
+    }
+    buffer.push(indent[level], '</dict>\n');
+  }
+}
+</script>
+    <script>$.waitForViews(function() {
+  if (!$.compiled) {
+    $.get('Java.tmLanguage', function(data) {
+      parseGrammar({name: 'Java.tmLanguage'}, data);
+    }, 'text');
+  }
+});
+
+function hideAll() {
+  var elements = $('.text-editor-input-wrapper:visible');
+  for (var i = elements.length - 1; i >= 0; i--) {
+    var $wrapper = $(elements[i]);
+    var value = $wrapper.find('.text-editor-input').val();
+
+    var editor = $wrapper.hide().closest('.text-editor').find('.text-editor-value');
+    editor.html(prepareValue(value)).css('display', 'inline-block');
+    if (!value) {
+      editor.addClass('blank');
+    } else {
+      editor.removeClass('blank');
+    }
+  };
+}
+
+function prepareValue(value) {
+  if (!value) return '(blank)';
+  return value.
+      replace(/&/g, '&amp;').
+      replace(/\"/g, '&quot;').
+      replace(/\'/g, '&apos;').
+      replace(/</g, '&lt;').
+      replace(/>/g, '&gt;').
+      replace(/\r\n|\r|\n/g, '<br>').
+      replace(/\t/g, '&nbsp;&nbsp;').
+      replace(/ /g, '&nbsp;');
+}
+
+function showEditor(editor) {
+  hideAll();
+  $('.text-editor-value', editor).hide();
+  $('.text-editor-input-wrapper', editor).show().find('.text-editor-input').focus();
+}
+
+function parseGrammar(file, fileContent) {
+  $('#tabs div').removeClass('active');
+  $('#tab-content > div').hide();
+
+  $('<div></div>').addClass('active').text(file.name).appendTo($('#tabs'));
+  var container = $('<div></div>').appendTo($('#tab-content'));
+  var grammar = xmlToJson(fileContent);
+  container.html($.views.grammar.render({grammar: grammar}));
+}
+
+function loadGrammar(file) {
+  window.f = file;
+  var reader = new FileReader();
+  reader.onload = function(readEvent) {
+    parseGrammar(file, readEvent.target.result);
+  };
+  reader.readAsText(file);
+}
+
+$(document).
+  on('mouseover', '.row', function() {
+    $('.active-row').removeClass('active-row');
+    if (!$(this).find('.row').length) {
+      $(this).addClass('active-row');
+    }
+    return false;
+  }).
+
+  on('click', function(e) {
+    hideAll();
+    var node = $(e.target);
+    if (!node.hasClass('text-editor')) node = node.closest('.text-editor');
+    if (node.length) showEditor(node[0]);
+  }).
+
+  on('keydown', '.text-editor textarea, .text-editor input', function(e) {
+    var $this = $(this);
+    if (e.ctrlKey && e.keyCode == 13) {  // Ctrl+Enter
+      $this.blur();
+      return false;
+    } else if (e.keyCode == 9) { // tab
+      $this.blur();
+      var direction = e.shiftKey ? -1 : 1;
+      var currentEditor = $this.closest('.text-editor')[0];
+      var selector = '.list-entry, .dict-entry, .grammar-editor';
+      var parent = $this.closest(selector);
+      var numParents = parent.parents(selector).length + 1;
+      var editors = parent.find('.text-editor').filter(function() { return $(this).parents(selector).length == numParents; });
+      for (var i = 0; i < editors.length; i++) {
+        if (editors[i] === currentEditor) {
+          if (direction < 0) {
+            var ix = i === 0 ? editors.length - 1 : i - 1;
+          } else {
+            var ix = i === editors.length - 1 ? 0 : i + 1;
+          }
+          showEditor($(editors[ix]));
+          break;
+        }
+      }
+      return false;
+    }
+  }).
+
+  on('keyup keydown focus', 'textarea.text-editor-input', function() {
+    $(this).height(Math.max(50, this.scrollHeight || 0));
+  }).
+
+  on('change', '.pattern-multi-regex textarea', function() {
+    var container = $(this).closest('.pattern-editor-container');
+    var blank = $.grep(container.find('.pattern-multi-regex textarea'), function(textarea) { return !!$(textarea).val(); }).length == 0;
+    var values = container.find('.pattern-editor > .pattern-multi-value');
+    blank ? values.hide() : values.show();
+  }).
+
+  on('click', '.pattern-editor-expander, .pattern-editor-label', function() {
+    var container = $(this).closest('.pattern-editor-container');
+    var label = container.find('.pattern-editor-label:first');
+    var expander = container.find('.pattern-editor-expander:first');
+    var editor = container.find('.pattern-editor:first');
+
+    if (editor.is(':visible')) {
+      editor.hide();
+      label.show();
+      expander.text('[+]');
+    } else {
+      editor.show();
+      label.hide();
+      expander.text('[-]');
+    }
+  }).
+
+  on('click', '.delete', function() {
+    $(this).closest('.list-entry').remove();
+  }).
+
+  on('click', '.up', function() {
+    var entry = $(this).closest('.list-entry');
+    var prev = entry.prev();
+    prev.remove();
+    prev.insertAfter(entry);
+  }).
+
+  on('click', '.down', function() {
+    var entry = $(this).closest('.list-entry');
+    var next = entry.next();
+    next.remove();
+    next.insertBefore(entry);
+  }).
+
+  on('change', '#upload-file input', function(event) {
+    var files = event.target.files;
+    if (files && files.length) {
+      for (var i = 0; i < files.length; i++) {
+        loadGrammar(files[i]);
+      }
+    }
+  }).
+
+  on('click', '#tabs div', function() {
+    var tabs = $('#tabs div').removeClass('active');
+    var content = $('#tab-content > div').hide();
+
+    for (var i = 0; i < tabs.length; i++)     {
+      if (tabs[i] === this) break;
+    }
+
+    $(this).addClass('active');
+    $(content[i]).show();
+  })
+
+$('#upload')[0].addEventListener('dragover', function(event) {
+  event.stopPropagation();
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'copy';
+});
+
+$('#upload')[0].addEventListener('drop', function(event) {
+  event.stopPropagation();
+  event.preventDefault();
+
+  var files = event.dataTransfer.files;
+  if (files && files.length) {
+    for (var i = 0; i < files.length; i++) {
+      loadGrammar(files[i]);
+    }
+  }
+});
+
+$(document).ready(function() {
+  $('#dialog').css({
+    'left': ($(window).width() - $('#dialog').width()) / 2 + 'px',
+    'top': ($(window).height() - $('#dialog').height()) / 2 + 'px'
+  });
+
+  var d = new Date();
+  d.setFullYear(d.getFullYear() + 1);
+  if ($.cookie('dialog')) $('#dialog').hide();
+  else $.cookie('dialog', true, {expires: d});
+});
+
+/*
+  on('dragstart', '.list-entry', function() {
+    console.log('dragstart');
+    $(this).addClass('dragging');
+  }).
+
+  on('dragend', function() {
+    console.log('dragend');
+    $(this).removeclass('dragging');
+  }).
+
+  on('dragenter', function() {
+    console.log('dragenter');
+  }).
+
+  on('dragleave', function() {
+    console.log('dragleave');
+  }).
+
+  on('dragover', function(e) {
+    console.log('dragover');
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+  }).
+
+  on('drop', function(e) {
+    console.log('drop');
+    e.preventDefault();
+    return false;
+  })
+*/
+</script>
+  </body>
+</html>

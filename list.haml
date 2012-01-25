@@ -1,0 +1,7 @@
+@{values: []}
+.list-editor
+  .list-entries
+    - for value in values
+      .list-entry{:draggable => true}
+        = $.views[view].render({value: value})
+  %a.add-list-entry{:href => 'javascript:void(0);'} Add Entry

@@ -1,0 +1,11 @@
+@{values: {}, disabled: false}
+.dict-editor
+  .dict-entries
+    - for (var key in values)
+      .row
+        .dict-entry
+          .dict-entry-key
+            = $.views.text_editor.render({value: key})
+          .dict-entry-value
+            = $.views[view].render({value: values[key]})
+  %a.add-dict-entry{:href => 'javascript:void(0);', :style => disabled ? 'display: none;' : ''} Add Entry

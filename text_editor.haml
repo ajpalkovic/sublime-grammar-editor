@@ -1,0 +1,9 @@
+@{multiline: false}
+- value = (value && value.name) || value;
+%span.text-editor
+  %span.text-editor-value{:style => 'display: inline-block;', :class => !value ? 'blank' : ''}= prepareValue(value)
+  %span.text-editor-input-wrapper{:style => 'display: none;'}
+    - if multiline
+      %textarea.text-editor-input= h(value)
+    - else
+      %input.text-editor-input{:type => 'text', :value => h(value)}

@@ -1,0 +1,28 @@
+- var label = value.name || value.contentName || value.include || value.comment || value.match || value.begin || 'Pattern(s)';
+.pattern-editor-container
+  .pattern-editor-expander [+]
+  .pattern-editor-label= label
+  .pattern-editor{:style => 'display: none;'}
+    = $.views.text_row.render({label: 'Comment', key: 'comment', value: value.comment, multiline: true})
+    = $.views.text_row.render({label: 'Include', key: 'include', value: value.include})
+    = $.views.text_row.render({label: 'Scope', key: 'name', value: value.name})
+    = $.views.text_row.render({label: 'Content Name', key: 'contentName', value: value.contentName})
+    = $.views.text_row.render({label: 'Match Regex', key: 'match', value: value.match, multiline: true})
+    .pattern-multi-regex= $.views.text_row.render({label: 'Begin Regex', key: 'begin', value: value.begin, multiline: true})
+    .pattern-multi-regex= $.views.text_row.render({label: 'End Regex', key: 'end', value: value.end, multiline: true})
+    .row.captures-row
+      %span.label{'data-key': 'captures'} Captures
+      = $.views.dict.render({values: value.captures || {}, view: 'text_editor'})
+    .row.captures-row.pattern-multi-value{:style => value.begin ? '' : 'display: none;'}
+      %span.label{'data-key': 'beginCaptures'} Begin Captures
+      = $.views.dict.render({values: value.beginCaptures || {}, view: 'text_editor'})
+    .row.captures-row.pattern-multi-value{:style => value.end ? '' : 'display: none;'}
+      %span.label{'data-key': 'endCaptures'} End Captures
+      = $.views.dict.render({values: value.endCaptures || {}, view: 'text_editor'})
+    .row
+      %span.label{'data-key': 'patterns'} Patterns
+      = $.views.list.render({view: 'pattern', values: value.patterns || []})
+    .buttons
+      %a.delete{:href => 'javascript:void(0);'} Delete
+      %a.up{:href => 'javascript:void(0);'} Move Up
+      %a.down{:href => 'javascript:void(0);'} Move Down

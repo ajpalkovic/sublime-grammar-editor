@@ -1,0 +1,15 @@
+.grammar-editor
+  = $.views.text_row.render({label: 'Comment', key: 'comment', value: grammar.comment})
+  = $.views.text_row.render({label: 'firstLineMatch', value: grammar.firstLineMatch})
+  = $.views.text_row.render({label: 'foldingStartMarker', value: grammar.foldingStartMarker, multiline: true})
+  = $.views.text_row.render({label: 'foldingStopMarker', value: grammar.foldingStopMarker, multiline: true})
+  = $.views.text_row.render({label: 'Name', key: 'name', value: grammar.name})
+  = $.views.text_row.render({label: 'keyEquivalent', value: grammar.keyEquivalent})
+  = $.views.text_row.render({label: 'scope', value: grammar.scope})
+  = $.views.text_row.render({label: 'uuid', value: grammar.uuid})
+  .row
+    %span.label{'data-key': 'patterns'} Patterns
+    = $.views.list.render({view: 'pattern', values: grammar.patterns || []})
+  .row.repository
+    %span.label{'data-key': 'repository'} Repository
+    = $.views.dict.render({view: 'pattern', values: grammar.repository || {}})
